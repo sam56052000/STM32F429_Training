@@ -1,7 +1,6 @@
 
 #include "main.h"
 
-
 void RCC_Configuration(void)
 {
       /* --------------------------- System Clocks Configuration -----------------*/
@@ -55,6 +54,60 @@ void LED3_Toggle(void){
 
 }
 
+void LED4_Toggle(void){
+
+
+  GPIOG->ODR ^= GPIO_Pin_14;
+
+}
+
+void LED3_On(void){
+
+  GPIO_SetBits(GPIOG,GPIO_Pin_13);
+
+}
+
+void LED3_Off(void){
+
+  GPIO_ResetBits(GPIOG,GPIO_Pin_13);
+
+}
+
+void LED4_On(void){
+
+  GPIO_SetBits(GPIOG,GPIO_Pin_14);
+
+}
+
+void LED4_Off(void){
+
+  GPIO_ResetBits(GPIOG,GPIO_Pin_14);
+
+}
+
+char delay_check=0;
+void Delay_1us(uint32_t nCnt_1us)
+{
+  uint32_t nCnt;
+
+  for (; nCnt_1us != 0; nCnt_1us--)
+  {
+    for (nCnt = 45; nCnt != 0; nCnt--)
+    {
+      if(delay_check==1)
+      {
+        break;
+      }
+    }
+    if(delay_check==1)
+    {
+      delay_check=0;
+      break;
+    }
+  }
+}
+
+
 void USART1_Configuration(void)
 {
     USART_InitTypeDef USART_InitStructure;
@@ -101,7 +154,7 @@ void USART1_puts(char* s)
         s++;
     }
 }
-
+char q[5],t=0,t3=0,t4=0;
 /**************************************************************************************/
 int main(void)
 {
@@ -109,28 +162,248 @@ int main(void)
     GPIO_Configuration();
     USART1_Configuration();
     LED_Initialization();
-    USART1_puts("Hello World!\r\n");
+    USART1_puts("HW2 interrupt\r\n");
     USART1_puts("Just for STM32F429I Discovery verify USART1 with USB TTL Cable\r\n");
     while(1)
     {
+      //set LED On and Off
+      // if(t=='a')//check a
+      // {
+      //   while(1)//wait for interrupt
+      //   {
+      //     if(b==1)
+      //     {
+      //       b=0;
+      //       break;
+      //     }
+      //   }
+      //   if(t=='b')//check b
+      //   {
+      //     while(1)//wait for interrupt
+      //     {
+      //       if(b==1)
+      //       {
+      //         b=0;
+      //         break;
+      //       }
+      //     }
+      //     if(t=='c')//check c
+      //     {
+      //       while(1)//wait for interrupt
+      //       {
+      //         if(b==1)
+      //         {
+      //           b=0;
+      //           break;
+      //         }
+      //       }
+      //       if(t=='3')
+      //       {
+      //         while(1)//wait for interrupt
+      //         {
+      //           if(b==1)
+      //           {
+      //             b=0;
+      //             break;
+      //           }
+      //         }
+      //         if(t=='o')
+      //         {
+      //           //LED3 ON
+      //           LED3_On();
+      //           t3=0;
+      //           t3check=0;
+      //         }
+      //         else if(t=='f')
+      //         {
+      //           //LED3 OFF
+      //           LED3_Off();
+      //           t3=0;
+      //           t3check=0;
+      //         }
+      //       }
+      //       else if(t=='4')
+      //       {
+      //         while(1)//wait for interrupt
+      //         {
+      //           if(b==1)
+      //           {
+      //             b=0;
+      //             break;
+      //           }
+      //         }
+      //         if(t=='o')
+      //         {
+      //           //LED4 ON
+      //           LED4_On();
+      //           t4=0;
+      //           t4check=0;
+      //         }
+      //         else if(t=='f')
+      //         {
+      //           //LED4 OFF
+      //           LED4_Off();
+      //           t4=0;
+      //           t4check=0;
+      //         }
+      //       }
+      //     }
+      //   }
+
+      // }
+
+      // if(t=='d')//check d
+      // {
+      //   while(1)//wait for interrupt
+      //   {
+      //     if(b==1)
+      //     {
+      //       b=0;
+      //       break;
+      //     }
+      //   }
+      //   if(t=='e')//check e
+      //   {
+      //     while(1)//wait for interrupt
+      //     {
+      //       if(b==1)
+      //       {
+      //         b=0;
+      //         break;
+      //       }
+      //     }
+      //     if(t=='f')//check f
+      //     {
+      //       while(1)//wait for interrupt
+      //       {
+      //         if(b==1)
+      //         {
+      //           b=0;
+      //           break;
+      //         }
+      //       }
+      //       if(t=='3')
+      //       {
+      //         t3=1;
+      //       }
+      //       else if(t=='4')
+      //       {
+      //         t4=1;
+      //       }
+      //     }
+      //   }
+      // }
+      if(q[0]==97)
+      {
+        if(q[1]==98)
+        {
+          if(q[2]==99)
+          {
+            if(q[3]=='3')
+            {
+              if(q[4]==111)
+              {
+                LED3_On();
+                t3=0;
+              }
+              else if(q[4]==102)
+              {
+                LED3_Off();
+                t3=0;
+              }
+            }
+            else if(q[3]=='4')
+            {
+              if(q[4]==111)
+              {
+                LED4_On();
+                t4=0;
+              }
+              else if(q[4]==102)
+              {
+                LED4_Off();
+                t4=0;
+              }
+            }
+          }
+        }
+      }
+      if(q[1]==100)
+      {
+        if(q[2]==101)
+        {
+          if(q[3]==102)
+          {
+            if(q[4]=='3')
+            {
+              t3=1;
+            }
+            else if(q[4]=='4')
+            {
+              t4=1;
+            }
+          }
+        }
+      }
+      if(q[0]==100)
+      {
+        if(q[1]==101)
+        {
+          if(q[2]==102)
+          {
+            if(q[3]=='3')
+            {
+              t3=1;
+            }
+            else if(q[4]=='4')
+            {
+              t4=1;
+            }
+          }
+        }
+      }
+      if(t3==1)
+      {
         LED3_Toggle();
-
-        Delay_1us(10000);
-
-
+        if(t4==1)
+        {
+          Delay_1us(5000);
+        }
+        else
+        {
+          Delay_1us(10000);
+        }
+      }
+      if(t4==1)
+      {
+        LED4_Toggle();
+        if(t3==1)
+        {
+          Delay_1us(5000);
+        }
+        else
+        {
+          Delay_1us(10000);
+        }
+      }
     }
-
 }
 
 
 void USART1_IRQHandler(void)
 {
   
-  if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) {
+  if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) 
+  {
     uart1_data = USART_ReceiveData(USART1);
-
     USART_SendData(USART1, uart1_data);
-
+    t = USART_ReceiveData(USART1);
+    delay_check=1;//break to delay
+    q[0]=q[1];
+    q[1]=q[2];
+    q[2]=q[3];
+    q[3]=q[4];
+    q[4]=t;
   }
 
 }

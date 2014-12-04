@@ -16,7 +16,17 @@ void LED4_Toggle(void);
 void LED4_On(void);
 void LED4_Off(void);
 uint8_t PushButton_Read(void);
+
+void v13_on(void);
+void v13_off(void);
+void v14_on(void);
+void v14_off(void);
+void v15_on(void);
+void v15_off(void);
+
 static inline void Delay_1us(uint32_t);
+
+
 
 #endif /* __MAIN_H */
 
