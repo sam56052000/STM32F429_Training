@@ -1,11 +1,25 @@
 #include "main.h"
 
+char delay_check=0;
 static inline void Delay_1us(uint32_t nCnt_1us)
 {
   volatile uint32_t nCnt;
 
   for (; nCnt_1us != 0; nCnt_1us--)
-    for (nCnt = 13; nCnt != 0; nCnt--);
+  {
+    for (nCnt = 13; nCnt != 0; nCnt--)
+    {
+      if(delay_check==1)
+      {
+        break;
+      }
+    }
+    if(delay_check==1)
+      {
+        break;
+        delay_check=0;
+      }
+  }
 }
 
  
@@ -52,8 +66,8 @@ void Timer5_Initialization(void)
   /* -- Timer Configuration --------------------------------------------------- */
   TIM_DeInit(TIM5);
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStruct;
-  TIM_TimeBaseStruct.TIM_Period = 25000 - 1 ;  //250ms  --> 4Hz
-  TIM_TimeBaseStruct.TIM_Prescaler = 900 - 1; // Prescaled by 900 -> = 0.1M(10us)
+  TIM_TimeBaseStruct.TIM_Period = 1000 - 1 ;  //250ms  --> 4Hz
+  TIM_TimeBaseStruct.TIM_Prescaler = 600 - 1; // Prescaled by 900 -> = 0.1M(10us)
   TIM_TimeBaseStruct.TIM_ClockDivision = TIM_CKD_DIV1; // Div by one -> 90 MHz (Now RCC_DCKCFGR_TIMPRE is configured to divide clock by two)
   TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -86,6 +100,8 @@ int main(void)
     Timer5_Initialization();
     while(1)
     {
+        LED4_Toggle();
+        Delay_1us(6666);
         // this loop is doing nothing but smiling at you :)
     }
 }
@@ -98,7 +114,7 @@ void TIM5_IRQHandler()
         if (TIM_GetITStatus(TIM5, TIM_IT_Update) != RESET){
            LED3_Toggle();
 
-
+           delay_check=1;
             //TIM_SetAutoreload(TIM5, autoReloader);
             //autoReloader= autoReloader - 500;
 

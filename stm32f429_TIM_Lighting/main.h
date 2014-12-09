@@ -18,8 +18,10 @@ void LED4_On(void);
 void LED4_Off(void);
 void Timer4_Initialization(void);
 void Timer5_Initialization(void);
+void Timer6_Initialization(void);
 void TIM5_IRQHandler(void);
 void TIM4_IRQHandler(void);
+void TIM6_IRQHandler(void);
 
 static inline void Delay_1us(uint32_t);
 
