@@ -48,13 +48,26 @@ void ADC_Initialization(void)
 
   /* Enable ADC3, DMA2 and GPIO clocks ****************************************/
   RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOF, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC3, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2, ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 
   /* Configure ADC3 Channel7 pin as analog input ******************************/
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8|GPIO_Pin_9;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
   GPIO_Init(GPIOF, &GPIO_InitStructure);
+
+  //ADC1
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0;
+  GPIO_Init(GPIOC, &GPIO_InitStructure);
+  //ADC2
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1;
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+
 
   /* ADC Common Init **********************************************************/
   ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;                     // No external trigger is connected
@@ -72,12 +85,18 @@ void ADC_Initialization(void)
   ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;                       // Data bits shifted to right hand side (Low)
   ADC_InitStructure.ADC_NbrOfConversion = 1;                                   // Convert only once
   ADC_Init(ADC3, &ADC_InitStructure);
+  ADC_Init(ADC2, &ADC_InitStructure);
+  ADC_Init(ADC1, &ADC_InitStructure);
 
   /* ADC3 regular channel7 configuration *************************************/
   ADC_RegularChannelConfig(ADC3, ADC_Channel_6, 1, ADC_SampleTime_3Cycles);
+  ADC_RegularChannelConfig(ADC2, ADC_Channel_9, 1, ADC_SampleTime_3Cycles);
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_10, 1, ADC_SampleTime_3Cycles);
 
   /* Enable ADC3 */
   ADC_Cmd(ADC3, ENABLE);
+  ADC_Cmd(ADC2, ENABLE);
+  ADC_Cmd(ADC1, ENABLE);
 }
 
 /**************************************************************************************/
@@ -116,7 +135,10 @@ void USART1_Configuration(void)
      *  - One Stop Bit
      *  - No parity
      *  - Hardware flow control disabled (RTS and CTS signals)
-     *  - Receive and transmit enabled
+     *  - Receivnel_6, 1, ADC_SampleTime_3Cycles);
+        ADC_SoftwareStartConv(ADC3);
+        Delay_1us(50);
+        adc_data1 = ADC_GetConversionValue(ADC3);e and transmit enabled
      */
     USART_InitStructure.USART_BaudRate = 57600;
     USART_InitStructure.USART_WordLength = USART_WordLength_8b;
@@ -137,11 +159,20 @@ void USART1_puts(char* s)
     }
 }
 
+// void DrawThickCircle(uint32_t x,uint32_t y,uint32_t radius, uint32_t thickness)
+// {
+//     LCD_SetTextColor(LCD_COLOR_BLACK);
+//     LCD_DrawFullCircle(x, y, radius);
+//     LCD_SetColors(LCD_COLOR_WHITE-1,LCD_COLOR_WHITE);
+//     LCD_DrawFullCircle(x, y, radius-thickness);
+// }
+
 /**************************************************************************************/
 
 uint8_t buff_transmit[100];
 int main(void)
 {
+
 
     RCC_Configuration();
     GPIO_Configuration();
@@ -149,30 +180,37 @@ int main(void)
     LED_Initialization();
     ADC_Initialization();
 
-    uint16_t adc_data1=0,adc_data2=0;
+    uint16_t adc_datax=0,adc_datay=0,adc_dataz=0;
     int i=0;
     float voltage1 =0.0f,voltage2 =0.0f;
 
     ADC_SoftwareStartConv(ADC3);
+    ADC_SoftwareStartConv(ADC2);
+    ADC_SoftwareStartConv(ADC1);
 
     while(1)
     {
         LED3_Toggle();
 
-        //ADC_RegularChannelConfig(ADC3, ADC_Channel_6, 1, ADC_SampleTime_3Cycles);
-        //ADC_SoftwareStartConv(ADC3);
+        ADC_RegularChannelConfig(ADC3, ADC_Channel_6, 1, ADC_SampleTime_3Cycles);
+        ADC_SoftwareStartConv(ADC3);
         Delay_1us(50);
-        adc_data1 = ADC_GetConversionValue(ADC3);
+        adc_datax = ADC_GetConversionValue(ADC3);
 
-        // ADC_RegularChannelConfig(ADC3, ADC_Channel_7, 1, ADC_SampleTime_3Cycles);
-        // ADC_SoftwareStartConv(ADC3);
-        // Delay_1us(10);
-        // adc_data2 = ADC_GetConversionValue(ADC3);
+        ADC_RegularChannelConfig(ADC2, ADC_Channel_9, 1, ADC_SampleTime_3Cycles);
+        ADC_SoftwareStartConv(ADC2);
+        Delay_1us(50);
+        adc_datay = ADC_GetConversionValue(ADC2);
 
-        voltage1 = (float)adc_data1*3.3f/4095.0f;
-        voltage2 = (float)adc_data2*3.3f/4095.0f;
+        ADC_RegularChannelConfig(ADC1, ADC_Channel_10, 1, ADC_SampleTime_3Cycles);
+        ADC_SoftwareStartConv(ADC1);
+        Delay_1us(50);
+        adc_dataz = ADC_GetConversionValue(ADC1);
 
-        sprintf((char *)buff_transmit, "ADC Data = %d, ADC Data2 = %d, Voltage = %fV, Voltage2 = %fV\r\n",adc_data1,adc_data2, voltage1,voltage2);
+        voltage1 = (float)adc_datax*3.3f/4095.0f;
+        voltage2 = (float)adc_datay*3.3f/4095.0f;
+
+        sprintf((char *)buff_transmit, "ADC Datax = %d, ADC Datay = %d, ADC Dataz = %d \r\n",adc_datax,adc_datay,adc_dataz);
           USART1_puts((char *)buff_transmit);
 
           for (i=0;i<50;i++){

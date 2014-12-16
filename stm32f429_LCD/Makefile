@@ -14,6 +14,7 @@ CMSIS=../Libraries/CMSIS
 ST=../Libraries/STM32F4xx_StdPeriph_Driver
 STM32F429_LIB = ../STM32F429I-Discovery
 COMMON = ../Common
+
 #============================================================================#
 
 CFLAGS_INCLUDE=-I. \
@@ -72,6 +73,9 @@ OBJS=	./system_stm32f4xx.o \
         $(ST)/src/stm32f4xx_dma2d.o \
         $(ST)/src/stm32f4xx_flash.o \
         $(ST)/src/stm32f4xx_gpio.o \
+        $(ST)/src/stm32f4xx_usart.o \
+        $(ST)/src/stm32f4xx_adc.o \
+        $(ST)/src/stm32f4xx_tim.o \
         $(ST)/src/stm32f4xx_ltdc.o \
         $(ST)/src/stm32f4xx_sai.o \
         $(ST)/src/stm32f4xx_fmc.o \

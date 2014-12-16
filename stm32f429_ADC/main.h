@@ -4,8 +4,12 @@
 #define __MAIN_H
 
  #include "stm32f4xx.h"
+// #include "stm32f429i_discovery.h"
+// #include "stm32f429i_discovery_lcd.h"
+// #include "stm32f429i_discovery_ioe.h"
+// #include "stm32f429i_discovery_lcd.c"
 
-
+// void DrawThickCircle(uint32_t x,uint32_t y,uint32_t radius, uint32_t thickness);
 void RCC_Configuration(void);
 void GPIO_Configuration(void);
 void ADC_Initialization(void);

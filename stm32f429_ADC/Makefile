@@ -12,13 +12,17 @@ GDB=arm-none-eabi-gdb
 LD=arm-none-eabi-gcc
 CMSIS=../Libraries/CMSIS
 ST=../Libraries/STM32F4xx_StdPeriph_Driver
+STM32F429_LIB = ../STM32F429I-Discovery
+COMMON = ../Common
 
 #============================================================================#
 
 CFLAGS_INCLUDE=-I. \
 	-I$(CMSIS)/Include\
-	-I$(CMSIS)/Device/ST/STM32F4xx/Include \
-	-I$(ST)/inc 
+	-I$(CMSIS)/Device/ST/STM32F4xx/Include\
+	-I$(ST)/inc \
+	-I$(STM32F429_LIB) \
+	-I$(COMMON)
 
 CFLAGS_DEFINE= \
         -D USE_STDPERIPH_DRIVER \
