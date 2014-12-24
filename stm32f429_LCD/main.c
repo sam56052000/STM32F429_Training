@@ -59,15 +59,15 @@ void ADC_Initialization(void)
   GPIO_Init(GPIOF, &GPIO_InitStructure);
 
   //ADC1
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 
   //ADC2
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 
 
@@ -92,8 +92,8 @@ void ADC_Initialization(void)
 
   /* ADC3 regular channel7 configuration *************************************/
   ADC_RegularChannelConfig(ADC3, ADC_Channel_13, 1, ADC_SampleTime_3Cycles);
-  ADC_RegularChannelConfig(ADC2, ADC_Channel_15, 1, ADC_SampleTime_3Cycles);
-  ADC_RegularChannelConfig(ADC1, ADC_Channel_14, 1, ADC_SampleTime_3Cycles);
+  ADC_RegularChannelConfig(ADC2, ADC_Channel_5, 1, ADC_SampleTime_3Cycles);
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_7, 1, ADC_SampleTime_3Cycles);
 
   /* Enable ADC3 */
   ADC_Cmd(ADC3, ENABLE);
@@ -276,15 +276,15 @@ int main(void)
     Delay_1us(50);
     adc_datax = ADC_GetConversionValue(ADC3);
 
-    ADC_RegularChannelConfig(ADC2, ADC_Channel_15, 1, ADC_SampleTime_3Cycles);
+    ADC_RegularChannelConfig(ADC2, ADC_Channel_5, 1, ADC_SampleTime_3Cycles);
     ADC_SoftwareStartConv(ADC2);
     Delay_1us(50);
-    adc_dataz = ADC_GetConversionValue(ADC2);
+    adc_datay = ADC_GetConversionValue(ADC2);
 
-    ADC_RegularChannelConfig(ADC1, ADC_Channel_14, 1, ADC_SampleTime_3Cycles);
+    ADC_RegularChannelConfig(ADC1, ADC_Channel_7, 1, ADC_SampleTime_3Cycles);
     ADC_SoftwareStartConv(ADC1);
     Delay_1us(50);
-    adc_datay = ADC_GetConversionValue(ADC1);
+    adc_dataz = ADC_GetConversionValue(ADC1);
 
     // voltage1 = (float)adc_datax*3.3f/4095.0f;
     // voltage2 = (float)adc_datay*3.3f/4095.0f;
@@ -340,8 +340,8 @@ int main(void)
 
     //print g
     accx=(voltagex-1.34)/0.25;
-    accy=(voltagey-2.51)/0.06;
-    accz=(voltagez-1.95)/0.14;
+    accy=(voltagey-1.31)/0.28;
+    accz=(voltagez-1.31)/0.28;
     LCD_DisplayStringLine(LINE(7), (uint8_t*)"                                    ");
     sprintf((char *)buff_transmit, "Accx = %lf V",accx);
     LCD_DisplayStringLine(LINE(7), (uint8_t*)buff_transmit);
@@ -355,7 +355,7 @@ int main(void)
     LCD_DisplayStringLine(LINE(9), (uint8_t*)buff_transmit);
 
     ata=90-(180/pi)*acos((voltagex-1.34)/0.25);
-    rola=90-(180/pi)*acos((voltagey-2.51)/0.06);
+    rola=90-(180/pi)*acos((voltagey-1.31)/0.28);
 
     // if(ata>90)
     // {
@@ -418,7 +418,7 @@ int main(void)
     // LCD_SetColors(ASSEMBLE_RGB(colorR, colorG, colorB),LCD_COLOR_BLACK);
     // LCD_DrawFullRect(0,0,240,320);
 
-    Delay_1us(500000);
+    Delay_1us(5000);
 
 
     //----------------------------------------------------------------
