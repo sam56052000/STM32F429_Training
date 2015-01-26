@@ -62,7 +62,7 @@ void Timer5_Initialization(void)
 
 int8_t number_unsorted[10];
 int8_t number_sorted[10];
-
+int8_t temp,i,j;
 
 uint8_t tim5_update_flag=0;
 
@@ -128,6 +128,8 @@ int main(void)
                                            ,password[8]
                                            ,password[9]);     
     LCD_DisplayStringLine(LINE(2), (uint8_t *)lcd_text_main);
+
+
  
  
   while (1){
@@ -157,7 +159,25 @@ int main(void)
     number_sorted[8] = 0;
     number_sorted[9] = 0;
 
+    for(i=0;i<9;i++)
+    {
+      for(j=i;j<10;j++)
+      {
+        if(number_unsorted[j]<number_unsorted[i])
+        {
+          temp=number_unsorted[i];
+          number_unsorted[i]=number_unsorted[j];
+          number_unsorted[j]=temp;
+        }
+      }
+    }
 
+    for(i=0;i<10;i++)
+    {
+      number_sorted[i]=number_unsorted[i];
+    }
+
+ 
 
 
 

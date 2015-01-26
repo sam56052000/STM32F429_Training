@@ -4,6 +4,7 @@
 #define __MAIN_H
 
  #include "stm32f4xx.h"
+#include "stm32f4xx_tim.h"
 // #include "stm32f429i_discovery.h"
 // #include "stm32f429i_discovery_lcd.h"
 // #include "stm32f429i_discovery_ioe.h"
@@ -17,6 +18,11 @@ void LED_Initialization(void);
 void LED3_Toggle(void);
 void USART1_Configuration(void);
 void USART1_puts(char* s);
+void USART1_IRQHandler(void);
+void SPI_Initialization(void);
+void PWM_Initialization(void);
+void Timer5_Initialization(void);
+void TIM5_IRQHandler(void);
 static inline void Delay_1us(uint32_t);
 
 #endif /* __MAIN_H */

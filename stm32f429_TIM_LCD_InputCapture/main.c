@@ -8,29 +8,43 @@ void TIM5_IRQHandler(void);
 uint32_t timebaseCapture_prev = 0;
 uint32_t timebaseCapture_current =0;
 uint32_t timebaseCapture_output = 0;
+uint8_t hlstatus=1;
+TIM_ICInitTypeDef  TIM_ICInitStructure;
 
 void TIM2_IRQHandler()
 {
-
-
-  if (TIM_GetITStatus(TIM2, TIM_IT_CC1) == SET) {
-    /* Clear TIM2 Capture compare interrupt pending bit */
-    TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
-
-      /* Get the Input Capture value */
+  if (TIM_GetITStatus(TIM2, TIM_IT_CC1) == SET)//chanel 1's intrrupt
+  {
+    if(hlstatus==1)
+    {
+      TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
       timebaseCapture_prev = timebaseCapture_current;
       timebaseCapture_current = TIM_GetCapture1(TIM2);
+      TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Falling;
+      TIM_ICInit(TIM2, &TIM_ICInitStructure);
+      hlstatus=0;
+    }
+    else
+    {
+      TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+      timebaseCapture_prev = timebaseCapture_current;
+      timebaseCapture_current = TIM_GetCapture1(TIM2);
+      TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_Rising;
+      TIM_ICInit(TIM2, &TIM_ICInitStructure);
+      hlstatus=1;
+      if(timebaseCapture_current > timebaseCapture_prev)
+      {
 
-      if(timebaseCapture_current > timebaseCapture_prev){
-
-        timebaseCapture_output  = (timebaseCapture_current- timebaseCapture_prev)*5/18;
+        timebaseCapture_output  = (timebaseCapture_current- timebaseCapture_prev);//*5/18;
 
 
-      }else{
-
-        timebaseCapture_output  =  (0xFFFF - timebaseCapture_prev + timebaseCapture_current)*5/18;
       }
-      
+      else
+      {
+
+        timebaseCapture_output  =  (0xFFFF - timebaseCapture_prev + timebaseCapture_current);//*5/18;
+      }
+    }
   }
 }
 
@@ -39,7 +53,7 @@ void TIM2_Initialization(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
   NVIC_InitTypeDef NVIC_InitStructure;
-  TIM_ICInitTypeDef  TIM_ICInitStructure;
+  //TIM_ICInitTypeDef  TIM_ICInitStructure;
   TIM_TimeBaseInitTypeDef TIM_TimeBaseStruct;
   /* TIM2 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
@@ -66,8 +80,8 @@ void TIM2_Initialization(void)
   NVIC_Init(&NVIC_InitStructure);
 
   TIM_DeInit(TIM2);
-  TIM_TimeBaseStruct.TIM_Period = 0xFFFF;              
-  TIM_TimeBaseStruct.TIM_Prescaler = 50-1;          
+  TIM_TimeBaseStruct.TIM_Period = 9;//65535              
+  TIM_TimeBaseStruct.TIM_Prescaler = 10;//50-1          
   TIM_TimeBaseStruct.TIM_ClockDivision = 0;
   TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;    // Counter Up
   TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStruct);

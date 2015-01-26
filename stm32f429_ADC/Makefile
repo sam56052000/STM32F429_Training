@@ -75,6 +75,7 @@ OBJS=	./system_stm32f4xx.o \
         $(ST)/src/stm32f4xx_usart.o \
         $(ST)/src/stm32f4xx_adc.o \
         $(ST)/src/stm32f4xx_tim.o \
+        $(ST)/src/stm32f4xx_spi.o \
         ./main.o \
         $(STARTUP) 
         
