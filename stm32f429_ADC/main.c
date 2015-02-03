@@ -463,9 +463,9 @@ int main(void)
     USART1_puts((char *)buff_transmit);
 
     //clalbrate
-    // TIM2->CCR3 =1000;
-    // TIM1->CCR2 =2000;
-    // Delay_1us(5000000);
+    TIM2->CCR3 =1000;
+    TIM1->CCR2 =2000;
+    Delay_1us(5000000);
 
     sprintf((char *)buff_transmit, "system just aready");
     USART1_puts((char *)buff_transmit);
@@ -732,6 +732,10 @@ int main(void)
       
       //trust============================================
       II=II+(Xsta-ctrldata)*deltime;
+      if(II>200)
+      {
+        II=200;
+      }
 
       trustdata=1400;
       trust1=trustdata+P*(Xsta-ctrldata)+I*II+D*Xchange/deltime+0;
