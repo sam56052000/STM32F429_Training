@@ -80,7 +80,7 @@ void TIM2_Initialization(void)
   NVIC_Init(&NVIC_InitStructure);
 
   TIM_DeInit(TIM2);
-  TIM_TimeBaseStruct.TIM_Period = 9;//65535              
+  TIM_TimeBaseStruct.TIM_Period = 90;//65535              
   TIM_TimeBaseStruct.TIM_Prescaler = 10;//50-1          
   TIM_TimeBaseStruct.TIM_ClockDivision = 0;
   TIM_TimeBaseStruct.TIM_CounterMode = TIM_CounterMode_Up;    // Counter Up
