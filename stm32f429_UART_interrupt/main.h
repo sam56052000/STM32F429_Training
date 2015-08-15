@@ -4,6 +4,7 @@
 #define __MAIN_H
 
  #include "stm32f4xx.h"
+#include <stdio.h>
 
 uint8_t uart1_data;
 
@@ -20,6 +21,10 @@ void LED4_Off(void);
 void USART1_Configuration(void);
 void USART1_puts(char* s);
 void USART1_IRQHandler(void);
+
+void Trans_SBUS_data(void);
+void Inv_Trans_SBUS_data(void);
+void Send_SBUS_signal(void);
 
 static inline void Delay_1us(uint32_t);
 // static inline void Delay_1us(uint32_t nCnt_1us)

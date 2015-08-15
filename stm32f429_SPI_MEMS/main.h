@@ -11,7 +11,7 @@
 
 void USART1_Configuration(void);
 void USART1_puts(char* s);
-//void USART1_IRQHandler(void);
+void USART1_IRQHandler(void);
 void SPI_Initialization(void);
 void GPIO_Configuration(void);
 void RCC_Configuration(void);

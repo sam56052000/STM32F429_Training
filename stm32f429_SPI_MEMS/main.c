@@ -410,18 +410,18 @@ int main(void)
    
       Delay_1us(1000000);
     }
-  
+    
 }
 
-// uint8_t t=0;
-// void USART1_IRQHandler(void)
-// {
+uint8_t t=0;
+void USART1_IRQHandler(void)
+{
   
-//   if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) 
-//   {
-//     uart1_data = USART_ReceiveData(USART1);
-//     USART_SendData(USART1, uart1_data);
-//     t = USART_ReceiveData(USART1);
-//   }
+  if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET) 
+  {
+    uart1_data = USART_ReceiveData(USART1);
+    USART_SendData(USART1, uart1_data);
+    t = USART_ReceiveData(USART1);
+  }
 
-// }
+}
